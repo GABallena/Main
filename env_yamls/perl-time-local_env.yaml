@@ -1,9 +1,0 @@
-name: perl-time-local_env
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - perl=5.22.0.1
-  - perl-time-local=1.2300
-prefix: /home/gerald-amiel/miniconda3/envs/perl-time-local_env
