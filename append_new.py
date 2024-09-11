@@ -22,12 +22,14 @@ def check_bioconda_package(dependency, version=None):
             print(f"Installed version: {version}, Latest Bioconda version: {latest_version}")
             if version == latest_version:
                 print(f"{dependency} is up-to-date.")
+                return False  # No update needed
             else:
                 print(f"{dependency} has a newer version available: {latest_version}")
-        return True
+                return latest_version  # Return the new version
+        return None
     else:
         print(f"{dependency} is NOT a Bioconda package.")
-        return False
+        return None
 
 # Function to fetch the latest version of a Bioconda package using the Anaconda API
 def fetch_bioconda_version(package_name):
@@ -76,17 +78,39 @@ def parse_yaml_for_dependencies(yaml_file):
     
     return parsed_dependencies
 
-# Main function to check if each dependency is in Bioconda and output only Bioconda ones to a file
+# Function to update the YAML files with newer versions
+def update_yaml_with_new_versions(yaml_file, updated_packages):
+    with open(yaml_file, 'r') as f:
+        environment = yaml.safe_load(f)
+    
+    for i, dep in enumerate(environment['dependencies']):
+        if isinstance(dep, str):
+            package_name = dep.split('=')[0]
+            if package_name in updated_packages:
+                new_version = updated_packages[package_name]
+                environment['dependencies'][i] = f"{package_name}={new_version}"
+
+    with open(yaml_file, 'w') as f:
+        yaml.dump(environment, f)
+
+# Main function to check if each dependency is in Bioconda, compare versions, and update YAML if necessary
 def main():
     unique_dependencies = collect_unique_dependencies(yaml_dir)
+    updated_packages = {}
     
     # Prepare the output file
-    with open('bioconda_only_packages.txt', 'w') as outfile:
-        for dependency, version in unique_dependencies:
-            if check_bioconda_package(dependency, version):
-                outfile.write(f"{dependency} (installed version: {version})\n")
+    for yaml_file in os.listdir(yaml_dir):
+        if yaml_file.endswith(".yaml"):
+            updated_packages = {}
+            for dependency, version in parse_yaml_for_dependencies(os.path.join(yaml_dir, yaml_file)):
+                latest_version = check_bioconda_package(dependency, version)
+                if latest_version:
+                    updated_packages[dependency] = latest_version
+            if updated_packages:
+                print(f"Updating {yaml_file} with newer versions: {updated_packages}")
+                update_yaml_with_new_versions(os.path.join(yaml_dir, yaml_file), updated_packages)
     
-    print("Finished writing Bioconda packages to bioconda_only_packages.txt.")
+    print("Finished updating YAML files with newer Bioconda versions.")
 
 if __name__ == "__main__":
     main()
