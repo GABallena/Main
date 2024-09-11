@@ -1,0 +1,23 @@
+name: ucsc-fatotwobit_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - ca-certificates=2024.8.30
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libopenssl-static=3.3.2
+  - libpng=1.6.43
+  - libstdcxx=14.1.0
+  - libstdcxx-ng=14.1.0
+  - libuuid=2.38.1
+  - libzlib=1.3.1
+  - mysql-connector-c=6.1.11
+  - openssl=3.3.2
+  - ucsc-fatotwobit=469
+  - zlib=1.3.1
+prefix: /home/gerald-amiel/miniconda3/envs/ucsc-fatotwobit_env

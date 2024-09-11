@@ -1,0 +1,13 @@
+name: fasttree_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - fasttree=2.1.11
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+prefix: /home/gerald-amiel/miniconda3/envs/fasttree_env

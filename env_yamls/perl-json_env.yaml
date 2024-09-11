@@ -1,0 +1,20 @@
+name: perl-json_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libstdcxx=14.1.0
+  - libstdcxx-ng=14.1.0
+  - libxcrypt=4.4.36
+  - perl=5.32.1
+  - perl-common-sense=3.75
+  - perl-json=4.10
+  - perl-json-xs=4.03
+  - perl-types-serialiser=1.01
+prefix: /home/gerald-amiel/miniconda3/envs/perl-json_env

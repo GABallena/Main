@@ -1,0 +1,22 @@
+name: perl-http-date_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libxcrypt=4.4.36
+  - perl=5.32.1
+  - perl-carp=1.50
+  - perl-constant=1.33
+  - perl-exporter=5.74
+  - perl-extutils-makemaker=7.70
+  - perl-http-date=6.06
+  - perl-parent=0.241
+  - perl-time-local=1.35
+  - perl-timedate=2.33
+prefix: /home/gerald-amiel/miniconda3/envs/perl-http-date_env

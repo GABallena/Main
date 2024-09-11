@@ -1,0 +1,15 @@
+name: perl-digest-perl-md5_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libxcrypt=4.4.36
+  - perl=5.32.1
+  - perl-digest-perl-md5=1.9
+prefix: /home/gerald-amiel/miniconda3/envs/perl-digest-perl-md5_env

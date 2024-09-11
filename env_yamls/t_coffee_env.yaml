@@ -1,0 +1,43 @@
+name: t_coffee_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - c-ares=1.33.1
+  - ca-certificates=2024.8.30
+  - curl=7.87.0
+  - keyutils=1.6.1
+  - krb5=1.20.1
+  - ld_impl_linux-64=2.40
+  - libcurl=7.87.0
+  - libedit=3.1.20191231
+  - libev=4.33
+  - libffi=3.4.2
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libnghttp2=1.51.0
+  - libnsl=2.0.1
+  - libsqlite=3.46.0
+  - libssh2=1.10.0
+  - libstdcxx=14.1.0
+  - libstdcxx-ng=14.1.0
+  - libxcrypt=4.4.36
+  - libzlib=1.2.13
+  - ncurses=6.5
+  - openssl=1.1.1w
+  - perl=5.32.1
+  - pip=24.0
+  - python=3.7.12
+  - readline=8.2
+  - setuptools=69.0.3
+  - sqlite=3.46.0
+  - t_coffee=11.0.8
+  - tk=8.6.13
+  - wheel=0.42.0
+  - xz=5.2.6
+  - zlib=1.2.13
+prefix: /home/gerald-amiel/miniconda3/envs/t_coffee_env

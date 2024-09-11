@@ -1,0 +1,8 @@
+name: blast-legacy_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - blast-legacy=2.2.26
+prefix: /home/gerald-amiel/miniconda3/envs/blast-legacy_env

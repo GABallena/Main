@@ -1,0 +1,8 @@
+name: pplacer_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - pplacer=1.1.alpha19
+prefix: /home/gerald-amiel/miniconda3/envs/pplacer_env

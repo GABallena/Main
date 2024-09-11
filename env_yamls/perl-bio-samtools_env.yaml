@@ -1,0 +1,24 @@
+name: perl-bio-samtools_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libdb=6.2.32
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libstdcxx=14.1.0
+  - libstdcxx-ng=14.1.0
+  - libxcrypt=4.4.36
+  - libzlib=1.2.13
+  - perl=5.32.1
+  - perl-bio-samtools=1.43
+  - perl-bioperl-core=1.7.8
+  - perl-db_file=1.858
+  - perl-inc-latest=0.500
+  - perl-module-build=0.4234
+  - zlib=1.2.13
+prefix: /home/gerald-amiel/miniconda3/envs/perl-bio-samtools_env

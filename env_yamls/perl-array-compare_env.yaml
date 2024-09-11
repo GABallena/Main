@@ -1,0 +1,26 @@
+name: perl-array-compare_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libxcrypt=4.4.36
+  - perl=5.32.1
+  - perl-array-compare=3.0.1
+  - perl-carp=1.50
+  - perl-class-method-modifiers=2.13
+  - perl-exporter=5.74
+  - perl-exporter-tiny=1.002002
+  - perl-extutils-makemaker=7.70
+  - perl-moo=2.005004
+  - perl-role-tiny=2.002004
+  - perl-sub-quote=2.006006
+  - perl-test-fatal=0.016
+  - perl-try-tiny=0.31
+  - perl-type-tiny=1.016007
+prefix: /home/gerald-amiel/miniconda3/envs/perl-array-compare_env

@@ -1,0 +1,25 @@
+name: perl-spreadsheet-parseexcel_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libstdcxx=14.1.0
+  - libstdcxx-ng=14.1.0
+  - libxcrypt=4.4.36
+  - perl=5.32.1
+  - perl-crypt-rc4=2.02
+  - perl-digest-perl-md5=1.9
+  - perl-io-scalar=2.111
+  - perl-jcode=2.07
+  - perl-ole-storage_lite=0.20
+  - perl-parse-recdescent=1.967015
+  - perl-spreadsheet-parseexcel=0.66
+  - perl-spreadsheet-writeexcel=2.40
+  - perl-unicode-map=0.112
+prefix: /home/gerald-amiel/miniconda3/envs/perl-spreadsheet-parseexcel_env

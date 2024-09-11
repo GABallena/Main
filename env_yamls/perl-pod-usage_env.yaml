@@ -1,0 +1,22 @@
+name: perl-pod-usage_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libxcrypt=4.4.36
+  - perl=5.32.1
+  - perl-carp=1.50
+  - perl-exporter=5.74
+  - perl-extutils-makemaker=7.70
+  - perl-getopt-long=2.58
+  - perl-pod-escapes=1.07
+  - perl-pod-usage=2.03
+  - perl-test=1.26
+  - perl-test-harness=3.44
+prefix: /home/gerald-amiel/miniconda3/envs/perl-pod-usage_env

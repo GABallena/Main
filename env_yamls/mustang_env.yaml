@@ -1,0 +1,14 @@
+name: mustang_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgomp=14.1.0
+  - libstdcxx=14.1.0
+  - libstdcxx-ng=14.1.0
+  - mustang=3.2.3
+prefix: /home/gerald-amiel/miniconda3/envs/mustang_env

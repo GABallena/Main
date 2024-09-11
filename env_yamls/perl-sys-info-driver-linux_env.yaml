@@ -1,0 +1,24 @@
+name: perl-sys-info-driver-linux_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1
+  - _openmp_mutex=4.5
+  - libgcc=14.1.0
+  - libgcc-ng=14.1.0
+  - libgomp=14.1.0
+  - libxcrypt=4.4.36
+  - perl=5.32.1
+  - perl-carp=1.50
+  - perl-config-general=2.65
+  - perl-digest-md5=2.58
+  - perl-exporter=5.74
+  - perl-extutils-makemaker=7.70
+  - perl-pathtools=3.75
+  - perl-sys-info-base=0.7807
+  - perl-sys-info-driver-linux=0.7905
+  - perl-text-template-simple=0.91
+  - perl-unix-processors=2.046
+prefix: /home/gerald-amiel/miniconda3/envs/perl-sys-info-driver-linux_env
