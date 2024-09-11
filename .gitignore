@@ -1,0 +1,16 @@
+# Ignore everything
+*
+
+# Don't ignore .gitignore itself
+!.gitignore
+
+# Unignore specific file types and directories
+!*.bash
+!*.py
+!*.pl
+!*.smk
+!*.yaml
+!*.R
+
+# Ignore CAMISIM directory
+CAMISIM/
