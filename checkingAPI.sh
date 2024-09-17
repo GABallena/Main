@@ -34,20 +34,32 @@ else
     echo "API response received!"
 fi
 
-# Print the raw response
-echo "Raw API Response: $wakatime_stats"
+# Create the output TSV file
+output_file="wakatime_project_stats.tsv"
 
-# Attempt to extract coding time (this will depend on the API response structure)
-# Example assumes there's a 'grand_total' field, modify as needed
-echo "Attempting to parse API response..."
-coding_time=$(echo $wakatime_stats | jq -r '.data[0].grand_total.text')
-
-# Check if coding time was successfully parsed
-if [ -z "$coding_time" ]; then
-    echo "Error: Failed to extract coding time!"
-else
-    echo "Successfully extracted coding time!"
-    echo "Coding time today: $coding_time"
+# Check if a TSV file already exists, if not, create it with headers
+if [ ! -f "$output_file" ]; then
+    echo -e "Project\tLanguage\tLines\tCategory\tCreated At" > $output_file
 fi
 
-echo "Script finished."
+# Loop through each heartbeat and extract relevant fields
+echo "Extracting data for the TSV file..."
+for entry in $(echo "$wakatime_stats" | jq -c '.data[]'); do
+    project=$(echo "$entry" | jq -r '.project')
+    language=$(echo "$entry" | jq -r '.language')
+    lines=$(echo "$entry" | jq -r '.lines')
+    category=$(echo "$entry" | jq -r '.category')
+    created_at=$(echo "$entry" | jq -r '.created_at')
+
+    # Ensure all fields have values
+    project=${project:-"N/A"}
+    language=${language:-"N/A"}
+    lines=${lines:-"N/A"}
+    category=${category:-"N/A"}
+    created_at=${created_at:-"N/A"}
+
+    # Append to the TSV file
+    echo -e "$project\t$language\t$lines\t$category\t$created_at" >> $output_file
+done
+
+echo "Data extraction complete. Saved to $output_file."
