@@ -111,7 +111,12 @@ exclusion_keywords = [
     "cytes", "cytol", "NMR", "Gender", "Cyto", "Enrichment", "GSEA", "engine", "resource consumption", "biob", "invasive", "mtDNA",
     "human", "OS", "interactome", "Interactome", "Drosophila", "scrofa", "Xenopus", "purpuratus", "taurus", "Anopheles", "Rattus", "Ligand",
     "filamentous", "Filamentous", "Blot", "Blotting", "Gel", "Electrophore", "Medical image", "CLIP", "genome database", "Browser",
-    "image process", "HTTP", "string", "Lite", "disorder", "HTML", "date", "Clip", 
+    "image process", "HTTP", "string", "Lite", "disorder", "HTML", "date", "Clip", "cloning", "Influenza", "Arabidopsis", "probes",
+    "Sanger", "melanogaster", "reactome", "plankton", "pigment.*", "Proteom,*", "Access", "IDE", "Assay", "Differential", "Epithelial",
+    "Mesenchymal", "Timer", "QSEA", "paper", "leukemia", "fibroblasts", "Cell-Lines", "import", "arrays", "Wrapper", "utility", "supervised",
+    "unsupervised", "Semi-Supervised", "Unsupervised", "Supervised", "FACS", "Candida", "polymorphic", "Digital", "fetal.*", "Bacillus", "Gallus",
+    "Zea", "japonicus", "Pongo", "Caeno.*", "gallopovo", "domestica", "rerio", "musculus", "Bombyx", "to MeSH", "Example", "example", "Falcon",
+    
 
     "metabol", "extracellular", "neural", "learning", "AI", "intelligen", "GUI", "interface", "web-base", 
     "ploidy", "homozyg", "transcriptom", "GWAS", "CRISPR", "lncRNA", "isotop", "No Summary", "methylation",
@@ -124,7 +129,9 @@ exclusion_keywords = [
     "cell-type", "Pathway", "Translation", "Transcription", "10X", "survival", "cohort", "lipid", "peptid", "nucleosome", "nuclear",
     "Redis", "ase", "long", "building", "DBBJ", "cgMLST", "ChIA", "oligomer", "Pore-C", "WBGS", "Submission", "API", "submission",
     "zyme", "convenien", "Proteom", "images", "plast" "Polishing", "polishing", "assay", "assays", "zenodo", "Dryad", "language",
-    "endogenous", "pars", "writ", "compression", "utilities", 
+    "endogenous", "pars", "writ", "compression", "utilities", "::", "wrapper", "Utilities", "Storage", "gene editing", "genome editing"
+    "genomics", "Genomics", "SARS", "Excel", "accession.*", "helper", "library", "module", "modules", "interactive", "FTP", "library", 
+    "DDBJ", "url", "hybrid.*", "YAML", "yaml", "FASTA", "FASTQ", "Center", "VCF", "vcf", "CAZ.*"
     
 ]
 

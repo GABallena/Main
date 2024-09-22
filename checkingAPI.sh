@@ -3,7 +3,6 @@
 # Fetch WakaTime API key from ~/.wakatime.cfg
 echo "Fetching WakaTime API key..."
 api_key=$(grep 'api_key' ~/.wakatime.cfg | cut -d' ' -f3)
-
 # Debugging: Echo the fetched API key
 echo "API Key: $api_key"
 
