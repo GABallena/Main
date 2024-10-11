@@ -1,86 +1,79 @@
 import requests
 from bs4 import BeautifulSoup
+import time
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 BIOCONDA_REPO_URL = "https://anaconda.org/bioconda/repo"
 
-# Function to fetch package names, filter by keywords and updates, and write to TSV
-def fetch_package_details(keywords, exclusion_keywords, output_file):
-    page = 1  # Start with page 1
+def setup_session():
+    session = requests.Session()
+    retries = Retry(total=5, backoff_factor=1, status_forcelist=[524, 502, 503, 504], allowed_methods=["GET"])
+    session.mount('http://', HTTPAdapter(max_retries=retries))
+    session.mount('https://', HTTPAdapter(max_retries=retries))
+    return session
+
+def fetch_package_details(session, keywords, exclusion_keywords, output_file):
+    page = 1
     while True:
         try:
             print(f"Searching page {page}...")
-            response = requests.get(f"{BIOCONDA_REPO_URL}?page={page}")
+            response = session.get(f"{BIOCONDA_REPO_URL}?page={page}", timeout=30)
             response.raise_for_status()
 
-            # Parse the main repo page HTML
             soup = BeautifulSoup(response.text, 'html.parser')
+            package_table = soup.find('table')
+            if not package_table:
+                print("Package table not found on the page. Ending search.")
+                break
 
-            # Open the output file to write filtered packages
             with open(output_file, "a") as f:
-                # Assuming the package list is in a table
-                package_table = soup.find('table')
-                if not package_table:
-                    print("Package table not found!")
-                    return
-
                 for row in package_table.find_all('tr')[1:]:  # Skip header row
                     columns = row.find_all('td')
+                    if len(columns) < 4:
+                        continue  # Skip rows that do not have enough columns
 
-                    # Extract package name, description, and last update date
                     package_name = columns[0].find('a').text.strip()
                     description = columns[2].text.strip() if len(columns) > 2 else "No description available"
                     updated_date = columns[3].text.strip() if len(columns) > 3 else "No date available"
 
-                    # Filter by last updated date (only keep 2020 and later)
-                    print(f"Checking last update: {updated_date}")
-                    if "2019" in updated_date or "2018" in updated_date or "2017" in updated_date:
-                        print(f"Last updated in 2019 or earlier, stopping search at package: {package_name}")
-                        return  # Stop the loop if we hit 2019 or earlier
+                    print(f"Processing package: {package_name}")
 
-                    print("Filtering inclusion keywords...")
-                    # Filter by keywords in the description
-                    matched = False
-                    for keyword in keywords:
-                        if keyword.lower() in description.lower():
-                            print(f"Keyword '{keyword}' found in package: {package_name}")
-                            matched = True
-                            break
-                    
+                    if any(old_date in updated_date for old_date in ["2019", "2018", "2017"]):
+                        print(f"Package {package_name} last updated in {updated_date}. Stopping page processing.")
+                        break  # Stop processing this page
+
+                    matched = any(keyword.lower() in description.lower() for keyword in keywords)
                     if not matched:
-                        print(f"No matching inclusion keywords for package: {package_name}")
-                        continue  # Skip if no inclusion keyword match
+                        print(f"No inclusion keywords matched for package: {package_name}")
+                        continue
 
-                    # Filter out based on exclusion keywords
-                    excluded = False
-                    for ex_keyword in exclusion_keywords:
-                        if ex_keyword.lower() in description.lower():
-                            print(f"Exclusion keyword '{ex_keyword}' found in package: {package_name}, skipping...")
-                            excluded = True
-                            break
-
+                    excluded = any(ex_keyword.lower() in description.lower() for ex_keyword in exclusion_keywords)
                     if excluded:
-                        continue  # Skip this entry if exclusion keyword matched
+                        print(f"Exclusion keyword found in package: {package_name}. Skipping.")
+                        continue
 
-                    # Write the package details to the TSV file
-                    print(f"Writing {package_name} to TSV file...")
                     f.write(f"{package_name}\t{description}\t{updated_date}\n")
-
-            # Increment page number to keep searching
+                    print(f"Added {package_name} to TSV file.")
+                    
             page += 1
-
-        except Exception as e:
-            print(f"Error while fetching package names on page {page}: {e}")
+            time.sleep(5)  # Sleep to avoid hitting server-side rate limiting
+        except requests.exceptions.Timeout:
+            print(f"Timeout occurred for page {page}. Retrying...")
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTP Error for page {page}: {e}")
+            break
+        except requests.exceptions.RequestException as e:
+            print(f"Request failed for page {page}: {e}")
             break
 
-# Main function to initiate fetching and writing package data
 def search_and_write_package_details(keywords, exclusion_keywords, output_file):
-    # Write the header of the TSV file
+    # Open and write the header of the TSV file
     with open(output_file, "w") as f:
-        f.write("Package_Name\tDescription\tUpdated_Date\n")  # Write TSV header
+        f.write("Package_Name\tDescription\tUpdated_Date\n")
     
-    # Fetch package names from the Bioconda repository
-    fetch_package_details(keywords, exclusion_keywords, output_file)
-
+    session = setup_session()
+    fetch_package_details(session, keywords, exclusion_keywords, output_file)
 # Example usage
 keywords = [
     "phylo", "k-mer", "populat", "metagen", "antimicrob", "antibio", "resistance",
@@ -135,9 +128,6 @@ exclusion_keywords = [
     
 ]
 
-
 output_file = "bioconda_filtered_packages.tsv"
 
-
-# Run the search and write the results to the TSV
 search_and_write_package_details(keywords, exclusion_keywords, output_file)
