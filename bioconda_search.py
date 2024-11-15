@@ -20,6 +20,8 @@ def setup_session():
 
 def fetch_package_details(session, keywords, exclusion_keywords, output_file):
     page = 1
+    found_packages = False  # To detect when we've fetched at least one package
+
     while True:
         try:
             print(f"Searching page {page}...")
@@ -28,10 +30,13 @@ def fetch_package_details(session, keywords, exclusion_keywords, output_file):
 
             soup = BeautifulSoup(response.text, 'html.parser')
             package_table = soup.find('table')
-            
+
             # Stop if no more packages are found on the page
             if not package_table:
-                print("No more packages found. Ending search.")
+                if found_packages:
+                    print("No more packages found. Ending search.")
+                else:
+                    print("No packages found at all. Check if the URL or repository structure has changed.")
                 break
 
             with open(output_file, "a") as f:
@@ -46,11 +51,7 @@ def fetch_package_details(session, keywords, exclusion_keywords, output_file):
 
                     print(f"Processing package: {package_name}")
 
-                    # Stop processing if an outdated package is encountered
-                    if any(year in updated_date for year in ["2019", "2018", "2017"]):
-                        print(f"Package {package_name} last updated in {updated_date}. Skipping remaining pages.")
-                        return  # Exit the function if outdated packages are found
-
+                    # Filter by keywords and exclusion keywords
                     if not any(keyword.lower() in description.lower() for keyword in keywords):
                         print(f"No relevant keywords found for: {package_name}")
                         continue
@@ -61,6 +62,7 @@ def fetch_package_details(session, keywords, exclusion_keywords, output_file):
 
                     f.write(f"{package_name}\t{description}\t{updated_date}\n")
                     print(f"Added {package_name} to TSV file.")
+                    found_packages = True  # Mark that we found a valid package
                     
             page += 1
             time.sleep(5)  # Avoid rate-limiting
@@ -73,6 +75,7 @@ def fetch_package_details(session, keywords, exclusion_keywords, output_file):
         except requests.exceptions.RequestException as e:
             print(f"Request failed: {e}")
             break
+
 
 def search_and_write_package_details(keywords, exclusion_keywords, output_file):
     # Open and write the header of the TSV file
