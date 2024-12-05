@@ -9,53 +9,67 @@ EXCLUDE_DIRS=("CAMISIM" "mhm2" "upcxx")
 # Get the current date and time for commit messages
 CURRENT_DATETIME=$(date +"%Y-%m-%d %H:%M:%S")
 
-# File size limit in MB
+# File size limit in MB (GitHub recommended)
 SIZE_LIMIT_MB=100
 
 # Loop through each subdirectory in the Desktop directory
 for dir in "$DESKTOP_DIR"/*/; do
-    # Get the base name of the directory
     dirname=$(basename "$dir")
 
-    # Check if the directory is in the exclude list
+    # Skip excluded directories
     if [[ " ${EXCLUDE_DIRS[@]} " =~ " $dirname " ]]; then
         echo "Skipping $dirname"
         continue
     fi
 
-    # Check if the directory contains a .git folder
+    # Check if directory is a git repository
     if [ -d "$dir/.git" ]; then
         echo -e "\n--- Processing Git repository in $dirname ---"
 
-        # Change to the repository directory
-        (cd "$dir"
+        # Change to repository directory
+        (cd "$dir" || exit
 
-        # Find files larger than the limit and exclude them
+        # Check if Git LFS is installed
+        if ! command -v git-lfs &> /dev/null; then
+            echo "Git LFS not found. Installing..."
+            git lfs install
+        fi
+
+        # Find and handle large files
         large_files=$(find . -type f -size +"$((SIZE_LIMIT_MB * 1024 * 1024))"c)
         if [[ -n "$large_files" ]]; then
-            echo "Skipping files larger than ${SIZE_LIMIT_MB}MB:"
+            echo "Large files detected (>${SIZE_LIMIT_MB}MB):"
             echo "$large_files"
+            
+            # Track large files with Git LFS
+            echo "Setting up Git LFS tracking for large files..."
             for file in $large_files; do
-                git update-index --skip-worktree "$file"
+                git lfs track "$file"
+                git add .gitattributes
             done
         fi
 
-        # Check the Git status
+        # Check status and commit
         git_status=$(git status --porcelain)
         if [[ -z "$git_status" ]]; then
             echo "No changes to commit in $dirname."
         else
-            # Add all changes except large files
-            echo "Adding changes in $dirname, excluding large files..."
+            echo "Adding changes in $dirname..."
             git add --all .
 
-            # Commit with timestamp message
-            echo "Committing changes in $dirname..."
+            echo "Committing changes..."
             git commit -m "Automated commit on $CURRENT_DATETIME"
 
-            # Push to the remote repository
-            echo "Pushing changes from $dirname..."
-            git push
+            echo "Pushing changes..."
+            if ! git push; then
+                echo "Push failed. You may need to setup Git LFS tracking manually:"
+                echo "1. git lfs install"
+                echo "2. git lfs track <large-file-pattern>"
+                echo "3. git add .gitattributes"
+                echo "4. git add <large-files>"
+                echo "5. git commit -m 'Add large files via LFS'"
+                echo "6. git push"
+            fi
         fi
         )
     else
