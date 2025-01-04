@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+from typing import List
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
@@ -17,6 +18,41 @@ def setup_session():
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
     return session
+
+def filter_package_name(name: str) -> bool:
+    """
+    Specific filtering for package names, handling common prefixes.
+    Returns True if package should be kept.
+    """
+    name = name.lower()
+    
+    # Explicitly exclude certain package prefixes/patterns
+    exclude_prefixes = [
+        'bioconductor-', 'bioconductor:', 'r-',
+        'ucsc-', 'chipseq-', 'rnaseq-', 'scrnaseq-'
+    ]
+    
+    if any(name.startswith(prefix) for prefix in exclude_prefixes):
+        return False
+        
+    return True
+
+def filter_text(text: str, keywords: List[str], exclusion_keywords: List[str]) -> bool:
+    """
+    Check if text matches inclusion/exclusion criteria.
+    Returns True if text should be kept, False if it should be filtered out.
+    """
+    text = text.lower()
+    
+    # First check package name specific exclusions
+    if not filter_package_name(text):
+        return False
+    
+    # Then do regular keyword filtering
+    has_inclusion = any(keyword.lower() in text for keyword in keywords)
+    has_exclusion = any(ex_keyword.lower() in text for ex_keyword in exclusion_keywords)
+    
+    return has_inclusion and not has_exclusion
 
 def fetch_package_details(session, keywords, exclusion_keywords, output_file):
     page = 1
@@ -51,13 +87,17 @@ def fetch_package_details(session, keywords, exclusion_keywords, output_file):
 
                     print(f"Processing package: {package_name}")
 
-                    # Filter by keywords and exclusion keywords
-                    if not any(keyword.lower() in description.lower() for keyword in keywords):
-                        print(f"No relevant keywords found for: {package_name}")
+                    # First check package name
+                    if not filter_package_name(package_name):
+                        print(f"Filtered out {package_name} - excluded prefix")
                         continue
 
-                    if any(ex_keyword.lower() in description.lower() for ex_keyword in exclusion_keywords):
-                        print(f"Exclusion keyword found in {package_name}. Skipping.")
+                    # Then check content
+                    name_ok = filter_text(package_name, keywords, exclusion_keywords)
+                    desc_ok = filter_text(description, keywords, exclusion_keywords)
+                    
+                    if not (name_ok or desc_ok):
+                        print(f"Filtered out {package_name} - no matching keywords")
                         continue
 
                     f.write(f"{package_name}\t{description}\t{updated_date}\n")
@@ -97,7 +137,24 @@ keywords = [
 exclusion_keywords = [
     "RNA-seq", "Nanopore", "PacBio", "long-read", "cancer", "16S", "ITS", "single-cell",
     "PCR", "MinION", "server", "Windows", "plant", "mouse", "neural", "epigen", "soma",
-    "chrom", "CRISPR", "expression", "cell-culture", "library", "API", "tissue", "MinION"
+    "chrom", "CRISPR", "expression", "cell-culture", "library", "API", "tissue", "MinION",
+    "proteome", "LC-MS", "mass-spec", "microarray", "RNAi", "RNA-Seq", "RNAseq", "ChIP-Seq",
+    "Whole-genome", "MS-MS", "Hi-C", "HiC", "HiSeq", "Hi-Seq", "HiChIP", "Hi-C", "HiC",
+    "bioconductor-*", "bioconductor::", "bioconductor-", "bioconductor/", "bioconductor.",
+    "UCSC", "CHIP-Seq", "ChIPSeq", "ChIP-seq", "ChIP", "ChIP-Seq", "ChIP-seq", "ChIPSeq",
+    "cytometry", "methylat", "methylation", "methy", "methyseq", "methy-seq", "methy-Seq",
+    "Genome wide", "10X", "10-X", "10x", "10-x", "10XGenomics", "10X-Genomics", "10X-Genomics",
+    "hg19", "hg38", "mm10", "mm9", "GRCh37", "GRCh38", "GRCh37.p13", "GRCh38.p12", "GRCh38.p13",
+    "GRCh37.p13", "GRCh38.p12", "GRCh38.p13", "GRCh37.p13", "GRCh38.p12", "GRCh38.p13",
+    "GRCh37.p13", "GRCh38.p12", "GRCh38.p13", "GRCh37.p13", "GRCh38.p12", "GRCh38.p13",
+    "GRCh37.p13", "GRCh38.p12", "GRCh38.p13", "GRCh37.p13", "GRCh38.p12", "GRCh38.p13",
+    "single molecule", "single-molecule", "singlemolecule", "single-cell", "single cell",
+    "singlecell", "single-cell", "single-cell", "singlecell", "single-cell", "single-cell",
+    "RAD-Seq", "RADSeq", "RAD-seq", "RADseq", "RAD", "RAD-Seq", "RAD-seq", "RADSeq", "RAD",
+    "methylation", "methy", "methyseq", "methy-seq", "methy-Seq", "methy-seq", "methyseq",
+    "RNA-Seq", "RNAseq", "RNA-seq", "RNAseq", "RNA-Seq", "RNA-seq", "RNAseq", "RNA-seq",
+    "genomic sequencing", "genomic-sequencing", "genomicsequencing", "genomic-sequencing",
+    "WGS", "WES", "whole exome", "whole-exome", "wholeexome", "whole-exome", "whole-genome"
 ]
 
 output_file = "bioconda_filtered_packages.tsv"
