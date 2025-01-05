@@ -154,7 +154,15 @@ exclusion_keywords = [
     "methylation", "methy", "methyseq", "methy-seq", "methy-Seq", "methy-seq", "methyseq",
     "RNA-Seq", "RNAseq", "RNA-seq", "RNAseq", "RNA-Seq", "RNA-seq", "RNAseq", "RNA-seq",
     "genomic sequencing", "genomic-sequencing", "genomicsequencing", "genomic-sequencing",
-    "WGS", "WES", "whole exome", "whole-exome", "wholeexome", "whole-exome", "whole-genome"
+    "WGS", "WES", "whole exome", "whole-exome", "wholeexome", "whole-exome", "whole-genome",
+    "ONT", "nanopore", "nanopore sequencing", "nanopore-sequencing", "nanoporesequencing",
+    "long read", "long-read", "longread", "long-read", "long-read", "longread", "long-read", 
+    "long reads", "long-reads", "longreads", "long-reads", "long-reads", "longreads", "long-reads",
+    "transcriptomic", "transcriptome", "transcriptomics", "HiFi", "Hi-Fi", "HiFi", "Hi-Fi",
+    "HiFi sequencing", "HiFi-sequencing", "HiFisequencing", "HiFi-sequencing", "HiFi-sequencing",
+    "mitochondria", "mitochondrial", "Bisulfite", "bisulfite", "bisulfite sequencing"
+ 
+
 ]
 
 output_file = "bioconda_filtered_packages.tsv"
